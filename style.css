@@ -220,6 +220,26 @@ main {
     border-left: 1px solid #fff;
 }
 
+/* scroll bar */
+.country-list::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* track */
+.country-list::-webkit-scrollbar-track {
+    background: #111;
+}
+
+/* handle */
+.country-list::-webkit-scrollbar-thumb {
+    background: #F1F1F1;
+}
+
+/* handle on hover */
+.country-list::-webkit-scrollbar-thumb:hover {
+    background: #FFF;
+}
+
 /* footer */
 footer {
     max-width: 1200px;
