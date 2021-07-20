@@ -150,3 +150,12 @@ main {
 .new-value {
     font-size: 1.3em;
 }
+
+/* chart */
+.chart {
+    width: 80%;
+    height: 70vh;
+    min-height: 500px;
+    margin: 0 auto;
+    padding: 50px 0;
+}
