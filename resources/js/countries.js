@@ -212,3 +212,21 @@ const country_list_element = document.querySelector(".country-list");
 const change_country_btn = document.querySelector(".change-country");
 const close_list_btn = document.querySelector(".close");
 const input = document.getElementById('search-input');
+
+// create the country list
+function createCountryList() {
+    const num_countries = country_list.length;
+
+    let i = 0, ul_list_id;
+
+    country_list.forEach((country, index) => {
+        if (index % Math.ceil(num_countries / num_of_ul_lists)) {
+            ul_list_id = `list-${i}`;
+            country_list_element.innerHTML += `<ul id = 'ul_list_id'></ul>ul>`;
+            i++;
+        }
+    })
+}
+
+let num_of_ul_lists = 3;
+createCountryList();
