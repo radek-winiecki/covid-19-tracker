@@ -1,7 +1,7 @@
 /* load fonts */
 @font-face {
     font-family: 'Gilroy';
-    src: url(Gilroy-Regular.woff) format("woff");
+    src: url(resources/css/Gilroy-Regular.woff) format("woff");
 }
 
 /* general */
@@ -65,7 +65,7 @@ header {
 
 /* nav */
 nav {
-   
+
 }
 
 nav ul {
@@ -85,4 +85,18 @@ nav ul li a {
     text-decoration: none;
     color: #6a149b;
     padding: 10px;
+}
+
+/* main */
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* bg image */
+.stats {
+    width: 100%;
+    /*height: 600px;*/
+    background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), url(img/bg.jpg);
+    background-size: cover;
 }
