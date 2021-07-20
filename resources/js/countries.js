@@ -220,11 +220,16 @@ function createCountryList() {
     let i = 0, ul_list_id;
 
     country_list.forEach((country, index) => {
-        if (index % Math.ceil(num_countries / num_of_ul_lists)) {
+        if (index % Math.ceil(num_countries / num_of_ul_lists) === 0) {
             ul_list_id = `list-${i}`;
-            country_list_element.innerHTML += `<ul id = 'ul_list_id'></ul>ul>`;
+            country_list_element.innerHTML += `<ul id = '${ul_list_id}'></ul>ul>`;
             i++;
         }
+        document.getElementById(`${ul_list_id}`).innerHTML += `
+            <li onclick = "fetchData('${country.name}')" id = "${country.name}">
+            ${country.name}
+            </li>li>
+        `;
     })
 }
 
