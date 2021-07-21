@@ -10,7 +10,7 @@ const new_deaths_element = document.querySelector(".deaths .new-value");
 const ctx = document.getElementById("axes_line_chart").getContext("2d");
 
 // app variables
-let app_date = [],
+let app_data = [],
     cases_list = [],
     recovered_list = [],
     deaths_list = [],
@@ -21,6 +21,40 @@ let country_code = geoplugin_countryCode();
 let user_country;
 country_list.forEach((country) => {
     if (country.code === country_code) {
-        user_country = country_name;
+        user_country = country.name;
     }
 });
+
+// API URL and KEY
+function fetchData(user_country) {
+    fetch(`https://covid19-monitor-pro.p.rapidapi.com/coronavirus/cases_by_days_by_country.php?country=${user_country}`, {
+        "method": "GET",
+        "headers": {
+            "x-rapidapi-host": "covid19-monitor-pro.p.rapidapi.com",
+            "x-rapidapi-key": "7e269ec140msh8a5df9cfc21b4b4p1c1e3ejsn9aba26afc6e0"
+        }
+    })
+        .then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            dates = Object.keys(data);
+            // console.log(dates);
+            dates.forEach((date) => {
+                let DATA = data[date];
+
+                app_data.push(DATA);
+                cases_list.push(parseInt(DATA.total_cases.replace(/,/g, "")));
+                recovered_list.push(parseInt(DATA.total_deaths.replace(/,/g, "")));
+                deaths_list.push(parseInt(DATA.total_recovered.replace(/,/g, "")));
+            })
+        })
+        .then(() => {
+            updateUI();
+        })
+        .catch((error) => {
+            alert(error);
+        })
+}
+
+fetchData(user_country);
