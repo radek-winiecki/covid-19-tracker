@@ -70,8 +70,13 @@ function updateStats() {
     let before_last_entry = app_data[app_data.length - 2];
 
     country_name_element.innerHTML = last_entry.country_name;
+
     total_cases_element.innerHTML = last_entry.total_cases || 0;
+    new_cases_element.innerHTML = `+${last_entry.new_cases || 0}`;
 
     recovered_element.innerHTML = last_entry.total_recovered || 0;
     new_recovered_element.innerHTML = `+${parseInt(last_entry.total_recovered.replace(/,/g, ""))}`;
+
+    deaths_element.innerHTML = last_entry.total_deaths;
+    new_deaths_element.innerHTML = `+${last_entry.new_deaths || 0}`;
 }
