@@ -18,50 +18,83 @@ let app_data = [],
     formatedDates = [];
 
 // get users country code
-let country_code = geoplugin_countryCode();
-let user_country;
-country_list.forEach((country) => {
-    if (country.code === country_code) {
-        user_country = country.name;
-    }
-});
+fetch("https://api.ipgeolocation.io/ipgeo?apiKey=14c7928d2aef416287e034ee91cd360d")
+    .then((res) => {
+        return res.json();
+    })
+    .then((data) => {
+        let country_code = data.country_code2;
+        let user_country;
+        country_list.forEach((country) => {
+            if (country.code == country_code) {
+                user_country = country.name;
+            }
+        });
+        fetchData(user_country);
+    });
 
 // API URL and KEY
-function fetchData(user_country) {
+function fetchData(country) {
+    user_country = country;
     country_name_element.innerHTML = "Loading...";
-    cases_list = [], recovered_list = [], deaths_list = [], dates = [], formatedDates = [];
-    fetch(`https://covid19-monitor-pro.p.rapidapi.com/coronavirus/cases_by_days_by_country.php?country=${user_country}`, {
-        "method": "GET",
-        "headers": {
-            "x-rapidapi-host": "covid19-monitor-pro.p.rapidapi.com",
-            "x-rapidapi-key": "7e269ec140msh8a5df9cfc21b4b4p1c1e3ejsn9aba26afc6e0"
-        }
-    })
-        .then((response) => {
-            return response.json();
-        })
-        .then((data) => {
-            dates = Object.keys(data);
-            // console.log(dates);
-            dates.forEach((date) => {
-                let DATA = data[date];
 
-                formatedDates.push(formatDate(date));
-                app_data.push(DATA);
-                cases_list.push(parseInt(DATA.total_cases.replace(/,/g, "")));
-                recovered_list.push(parseInt(DATA.total_deaths.replace(/,/g, "")));
-                deaths_list.push(parseInt(DATA.total_recovered.replace(/,/g, "")));
+    (cases_list = []),
+        (recovered_list = []),
+        (deaths_list = []),
+        (dates = []),
+        (formatedDates = []);
+
+    var requestOptions = {
+        method: "GET",
+        redirect: "follow",
+    };
+
+    const api_fetch = async (country) => {
+        await fetch(
+            "https://api.covid19api.com/total/country/" + country + "/status/confirmed",
+            requestOptions
+        )
+            .then((res) => {
+                return res.json();
             })
-        })
-        .then(() => {
-            updateUI();
-        })
-        .catch((error) => {
-            alert(error);
-        })
-}
+            .then((data) => {
+                data.forEach((entry) => {
+                    dates.push(entry.Date);
+                    cases_list.push(entry.Cases);
+                });
+            });
 
-fetchData(user_country);
+        await fetch(
+            "https://api.covid19api.com/total/country/" + country + "/status/recovered",
+            requestOptions
+        )
+            .then((res) => {
+                return res.json();
+            })
+            .then((data) => {
+                data.forEach((entry) => {
+                    recovered_list.push(entry.Cases);
+                });
+            });
+
+        await fetch(
+            "https://api.covid19api.com/total/country/" + country + "/status/deaths",
+            requestOptions
+        )
+            .then((res) => {
+                return res.json();
+            })
+            .then((data) => {
+                data.forEach((entry) => {
+                    deaths_list.push(entry.Cases);
+                });
+            });
+
+        updateUI();
+    };
+
+    api_fetch(country);
+}
 
 // update UI function
 function updateUI() {
@@ -70,19 +103,27 @@ function updateUI() {
 }
 
 function updateStats() {
-    let last_entry = app_data[app_data.length - 1];
-    let before_last_entry = app_data[app_data.length - 2];
+    const total_cases = cases_list[cases_list.length - 1];
+    const new_confirmed_cases = total_cases - cases_list[cases_list.length - 2];
 
-    country_name_element.innerHTML = last_entry.country_name;
+    const total_recovered = recovered_list[recovered_list.length - 1];
+    const new_recovered_cases = total_recovered - recovered_list[recovered_list.length - 2];
 
-    total_cases_element.innerHTML = last_entry.total_cases || 0;
-    new_cases_element.innerHTML = `+${last_entry.new_cases || 0}`;
+    const total_deaths = deaths_list[deaths_list.length - 1];
+    const new_deaths_cases = total_deaths - deaths_list[deaths_list.length - 2];
 
-    recovered_element.innerHTML = last_entry.total_recovered || 0;
-    new_recovered_element.innerHTML = `+${parseInt(last_entry.total_recovered.replace(/,/g, ""))}`;
+    country_name_element.innerHTML = user_country;
+    total_cases_element.innerHTML = total_cases;
+    new_cases_element.innerHTML = `+${new_confirmed_cases}`;
+    recovered_element.innerHTML = total_recovered;
+    new_recovered_element.innerHTML = `+${new_recovered_cases}`;
+    deaths_element.innerHTML = total_deaths;
+    new_deaths_element.innerHTML = `+${new_deaths_cases}`;
 
-    deaths_element.innerHTML = last_entry.total_deaths;
-    new_deaths_element.innerHTML = `+${last_entry.new_deaths || 0}`;
+    // format dates
+    dates.forEach((date) => {
+        formatedDates.push(formatDate(date));
+    });
 }
 
 // update Chart
