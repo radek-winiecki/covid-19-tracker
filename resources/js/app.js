@@ -58,3 +58,20 @@ function fetchData(user_country) {
 }
 
 fetchData(user_country);
+
+// update UI function
+function updateUI() {
+    updateStats();
+    // axesLinearChart();
+}
+
+function updateStats() {
+    let last_entry = app_data[app_data.length - 1];
+    let before_last_entry = app_data[app_data.length - 2];
+
+    country_name_element.innerHTML = last_entry.country_name;
+    total_cases_element.innerHTML = last_entry.total_cases || 0;
+
+    recovered_element.innerHTML = last_entry.total_recovered || 0;
+    new_recovered_element.innerHTML = `+${parseInt(last_entry.total_recovered.replace(/,/g, ""))}`;
+}
