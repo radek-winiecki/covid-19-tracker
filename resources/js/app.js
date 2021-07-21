@@ -8,3 +8,19 @@ const deaths_element = document.querySelector(".deaths .value");
 const new_deaths_element = document.querySelector(".deaths .new-value");
 
 const ctx = document.getElementById("axes_line_chart").getContext("2d");
+
+// app variables
+let app_date = [],
+    cases_list = [],
+    recovered_list = [],
+    deaths_list = [],
+    dates = [];
+
+// get users country code
+let country_code = geoplugin_countryCode();
+let user_country;
+country_list.forEach((country) => {
+    if (country.code === country_code) {
+        user_country = country_name;
+    }
+});
