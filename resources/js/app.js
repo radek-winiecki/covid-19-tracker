@@ -14,7 +14,8 @@ let app_data = [],
     cases_list = [],
     recovered_list = [],
     deaths_list = [],
-    dates = [];
+    dates = [],
+    formatedDates = [];
 
 // get users country code
 let country_code = geoplugin_countryCode();
@@ -27,7 +28,8 @@ country_list.forEach((country) => {
 
 // API URL and KEY
 function fetchData(user_country) {
-    cases_list = [], recovered_list = [], deaths_list = [], dates = [];
+    country_name_element.innerHTML = "Loading...";
+    cases_list = [], recovered_list = [], deaths_list = [], dates = [], formatedDates = [];
     fetch(`https://covid19-monitor-pro.p.rapidapi.com/coronavirus/cases_by_days_by_country.php?country=${user_country}`, {
         "method": "GET",
         "headers": {
@@ -44,6 +46,7 @@ function fetchData(user_country) {
             dates.forEach((date) => {
                 let DATA = data[date];
 
+                formatedDates.push(formatDate(date));
                 app_data.push(DATA);
                 cases_list.push(parseInt(DATA.total_cases.replace(/,/g, "")));
                 recovered_list.push(parseInt(DATA.total_deaths.replace(/,/g, "")));
@@ -126,4 +129,26 @@ function axesLinearChart() {
             maintainAspectRatio: false,
         },
     });
+}
+
+// format dates
+const monthsNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+];
+
+function formatDate(dateString) {
+    let date = new Date(dateString);
+
+    return `${date.getDate()} ${monthsNames[date.getMonth()]}`;
 }
