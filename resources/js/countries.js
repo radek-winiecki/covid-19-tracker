@@ -246,3 +246,7 @@ change_country_btn.addEventListener("click", function () {
 close_list_btn.addEventListener("click", function () {
     search_country_element.classList.toggle("hide");
 });
+
+country_list_element.addEventListener("click", function () {
+    search_country_element.classList.toggle("hide");
+});
