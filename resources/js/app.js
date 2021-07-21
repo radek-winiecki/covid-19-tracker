@@ -92,21 +92,37 @@ function axesLinearChart() {
     my_chart = new Chart(ctx, {
         type: "line",
         data: {
-            datasets: [{
-                label: 'First dataset',
-                data: [0, 20, 40, 50],
-            }],
-            labels: ['January', 'February', 'March', 'April'],
+            datasets: [
+                {
+                    label: "Cases",
+                    data: cases_list,
+                    fill: false,
+                    borderColor: "#FFF",
+                    backgroundColor: "#FFF",
+                    borderWidth: 1,
+                },
+                {
+                    label: "Recovered",
+                    data: recovered_list,
+                    fill: false,
+                    borderColor: "#009688",
+                    backgroundColor: "#009688",
+                    borderWidth: 1,
+                },
+                {
+                    label: "Deaths",
+                    data: deaths_list,
+                    fill: false,
+                    borderColor: "#f44336",
+                    backgroundColor: "#f44336",
+                    borderWidth: 1,
+                },
+            ],
+            labels: formatedDates,
         },
         options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        suggestedMin: 50,
-                        suggestedMax: 100
-                    }
-                }]
-            }
+            responsive: true,
+            maintainAspectRatio: false,
         },
     });
 }
