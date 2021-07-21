@@ -239,6 +239,8 @@ createCountryList();
 
 // show/hide the country list on click event
 change_country_btn.addEventListener("click", function () {
+    input.value = "";
+    resetCountryList();
     search_country_element.classList.toggle("hide");
     search_country_element.classList.add("fadeIn");
 });
@@ -256,7 +258,7 @@ country_list_element.addEventListener("click", function () {
 input.addEventListener("input", function () {
     let value = input.value.toUpperCase();
 
-    country_list.forEach( (country) => {
+    country_list.forEach((country) => {
         if (country.name.toUpperCase().startsWith(value)) {
             document.getElementById(country.name).classList.remove("hide");
         } else {
@@ -264,3 +266,10 @@ input.addEventListener("input", function () {
         }
     })
 })
+
+// reset country list (show all the countries)
+function resetCountryList() {
+    country_list.forEach((country) => {
+        document.getElementById(country.name).classList.remove("hide");
+    })
+}
